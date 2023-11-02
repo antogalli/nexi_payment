@@ -10,16 +10,16 @@ class ApiFrontOfficeQPRequest extends ApiFrontOfficeBaseRequest {
       : super(alias);
 
   ApiFrontOfficeQPRequest.map(obj) : super.map(obj) {
-    codTrans = obj["codTrans"];
-    currency = obj["currency"];
-    amount = obj["amount"];
+    codTrans = obj['codTrans'];
+    currency = obj['currency'];
+    amount = obj['amount'];
   }
 
   Map<String, dynamic> toMap() {
     var map = super.toMap();
-    map["codTrans"] = codTrans;
-    map["currency"] = currency;
-    map["amount"] = amount;
+    map['codTrans'] = codTrans;
+    map['currency'] = currency;
+    map['amount'] = amount;
 
     return map;
   }

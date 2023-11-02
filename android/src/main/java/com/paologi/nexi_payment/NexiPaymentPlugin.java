@@ -144,16 +144,29 @@ public class NexiPaymentPlugin implements FlutterPlugin, MethodCallHandler, Acti
 
   public static ApiFrontOfficeQPRequest getFrontOfficeRequest(MethodCall call)  {
     ApiFrontOfficeQPRequest apiFrontOfficeQPRequest = null;
-    try {
-      apiFrontOfficeQPRequest = new ApiFrontOfficeQPRequest(
-              call.argument("alias").toString(),
-              call.argument("codTrans").toString(),
-              call.argument("currency").toString(),
-              call.argument("amount") != null ? ((Integer)call.argument("amount")).longValue() : 0);
-    } catch (UnsupportedEncodingException | MacException e) {
-      e.printStackTrace();
-    }
-    return apiFrontOfficeQPRequest;
+    
+      String alias = call.argument("alias");
+      String codTrans = call.argument("codTrans");
+      String currency = call.argument("currency");
+      Integer amount = call.argument("amount");
+      
+      
+      try {
+        apiFrontOfficeQPRequest = new ApiFrontOfficeQPRequest(
+              alias,
+              codTrans,
+              currency,
+              amount);
+        Log.i(TAG, "apiFrontOfficeQPRequest Creato");
+      } catch (UnsupportedEncodingException e) {
+        Log.i(TAG, "Unsupported Exception");
+        e.printStackTrace();
+      } catch (MacException e) {
+        Log.i(TAG, "MacException Exception");
+        e.printStackTrace(); 
+      }
+
+      return apiFrontOfficeQPRequest;
   }
 
   @Override

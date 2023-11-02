@@ -10,12 +10,15 @@ class SecondPage extends StatefulWidget {
 
 class SecondPageState extends State<SecondPage> {
   late NexiPayment _nexiPayment;
-
+  static const _secretKey = 'YOUR_SECRET';
   @override
   void initState() {
     super.initState();
-    _nexiPayment = new NexiPayment(
-        secretKey: "_your_secret_key", environment: EnvironmentUtils.TEST);
+    _nexiPayment = NexiPayment(
+      secretKey: _secretKey,
+      environment: EnvironmentUtils.PROD,
+      domain: ''
+    );
   }
 
   @override
@@ -25,20 +28,14 @@ class SecondPageState extends State<SecondPage> {
         title: const Text('Second Page'),
       ),
       body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-            ElevatedButton(
-                child: Text("PAY"),
-                onPressed: () => _paga("insert_cod_trans41")),
-          ])),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+        ElevatedButton(child: Text("PAY"), onPressed: () => _paga("insert_cod_trans41")),
+      ])),
     );
   }
 
   void _paga(String codTrans) async {
-    var res = await _nexiPayment.xPayFrontOfficePaga(
-        "_your_alias_", codTrans, CurrencyUtilsQP.EUR, 2502);
+    var res = await _nexiPayment.xPayFrontOfficePaga(_secretKey, codTrans, CurrencyUtilsQP.EUR, 2502);
     openEndPaymentDialog(res);
   }
 
@@ -55,10 +52,7 @@ class SecondPageState extends State<SecondPage> {
                   Positioned(
                     bottom: -12,
                     left: -15,
-                    child: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        color: Colors.blueAccent,
-                        onPressed: () => Navigator.of(context).pop()),
+                    child: IconButton(icon: Icon(Icons.arrow_back), color: Colors.blueAccent, onPressed: () => Navigator.of(context).pop()),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -73,10 +67,7 @@ class SecondPageState extends State<SecondPage> {
                       ),
                       Text(
                         "Response",
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black38,
-                            fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 22, color: Colors.black38, fontWeight: FontWeight.bold),
                       ),
                     ],
                   )
@@ -85,11 +76,7 @@ class SecondPageState extends State<SecondPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(response,
-                  style: TextStyle(
-                      color: response == "OK" ? Colors.green : Colors.red))
-            ],
+            children: <Widget>[Text(response, style: TextStyle(color: response == "OK" ? Colors.green : Colors.red))],
           ),
         );
       },

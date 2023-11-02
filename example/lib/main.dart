@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nexi_payment/nexi_payment.dart';
 import 'package:nexi_payment/models/currency_utils_qp.dart';
 import 'package:nexi_payment/models/environment_utils.dart';
-import 'package:nexi_payment_example/second_page.dart';
+import './second_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +29,7 @@ class TestPage extends StatefulWidget {
 
 class TestPageState extends State<TestPage> {
   late NexiPayment _nexiPayment;
+    static const _secretKey = 'YOUR_SECRET';
 
   @override
   void initState() {
@@ -36,9 +37,10 @@ class TestPageState extends State<TestPage> {
 
     ///domain is not mandatory and it is set to https://ecommerce.nexi.it automatically if empty
     _nexiPayment = NexiPayment(
-        secretKey: "_your_key",
-        environment: EnvironmentUtils.TEST,
-        domain: "https://ecommerce.nexi.it");
+      secretKey:_secretKey,
+      environment: EnvironmentUtils.PROD,
+      domain: 'https://ecommerce.nexi.it',
+    );
   }
 
   @override
@@ -48,28 +50,27 @@ class TestPageState extends State<TestPage> {
         title: const Text('Plugin example app'),
       ),
       body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-            ElevatedButton(
-                child: Text("PAY"),
-                onPressed: () => _paga("pagamento-ios test-domain")),
-            ElevatedButton(
-                child: Text("GO to A SECOND PAGE"),
-                onPressed: () => Navigator.push<Widget>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SecondPage(),
-                      ),
-                    )),
-          ])),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+        ElevatedButton(child: const Text('PAY'), onPressed: () => _paga(DateTime.now().millisecondsSinceEpoch.toString())),
+        ElevatedButton(
+            child: const Text('GO to A SECOND PAGE'),
+            onPressed: () => Navigator.push<Widget>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SecondPage(),
+                  ),
+                )),
+      ])),
     );
   }
 
   void _paga(String codTrans) async {
     var res = await _nexiPayment.xPayFrontOfficePaga(
-        "_your_alias", codTrans, CurrencyUtilsQP.EUR, 2500);
+      'ALIAS_WEB_023034887',
+      codTrans,
+      CurrencyUtilsQP.EUR,
+      2500,
+    );
     openEndPaymentDialog(res);
   }
 
@@ -86,10 +87,7 @@ class TestPageState extends State<TestPage> {
                   Positioned(
                     bottom: -12,
                     left: -15,
-                    child: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        color: Colors.blueAccent,
-                        onPressed: () => Navigator.of(context).pop()),
+                    child: IconButton(icon: Icon(Icons.arrow_back), color: Colors.blueAccent, onPressed: () => Navigator.of(context).pop()),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -103,11 +101,8 @@ class TestPageState extends State<TestPage> {
                         ),
                       ),
                       Text(
-                        "Response",
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black38,
-                            fontWeight: FontWeight.bold),
+                        'Response',
+                        style: TextStyle(fontSize: 22, color: Colors.black38, fontWeight: FontWeight.bold),
                       ),
                     ],
                   )
@@ -116,11 +111,7 @@ class TestPageState extends State<TestPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(response,
-                  style: TextStyle(
-                      color: response == "OK" ? Colors.green : Colors.red))
-            ],
+            children: <Widget>[Text(response, style: TextStyle(color: response == 'OK' ? Colors.green : Colors.red))],
           ),
         );
       },
